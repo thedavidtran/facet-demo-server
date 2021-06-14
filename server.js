@@ -17,8 +17,9 @@ app.get("/", (req, res) => {
 	res.json({message: "Initial deployment on heroku."});
 });
 
-// bind user routes
+// bind routes
 require("./app/routes/user")(app);
+require("./app/routes/record")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;

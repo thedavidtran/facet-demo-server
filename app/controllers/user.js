@@ -6,8 +6,7 @@ exports.create = async (req, res) => {
 	const draft = req.body;
 	if (!draft) {
 		res.status(400).send({
-			message:
-				err.message || "Some error occurred while creating the User."
+			message: "Some error occurred while creating the User."
 		});
 	}
 	// Validate request
