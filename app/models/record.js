@@ -31,7 +31,5 @@ module.exports = (mongoose) => {
 		return object;
 	});
 
-	// Indexes
-	// TODO: add indexes on user
 	return mongoose.model("Record", recordSchema);
 };

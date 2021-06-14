@@ -14,11 +14,10 @@ app.use(express.urlencoded({extended: true}));
 
 // root route
 app.get("/", (req, res) => {
-	res.json({message: "Initial deployment on heroku."});
+	res.json({message: "Facet demo server."});
 });
 
 // bind routes
-require("./app/routes/user")(app);
 require("./app/routes/record")(app);
 
 // set port, listen for requests

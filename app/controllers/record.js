@@ -30,8 +30,6 @@ exports.create = async (req, res) => {
 
 /** Retrieve all Records from the database. */
 exports.findAll = async (req, res) => {
-	// FUTURE: support pagination.
-	// FUTURE: sort
 	const records = await Record.find({});
 	res.send(records);
 };
@@ -89,7 +87,6 @@ exports.update = async (req, res) => {
 			});
 			return;
 		}
-		// TODO: validate user has access to modify this record
 		let record = await Record.findById(id);
 		if (!record) {
 			res.status(404).send({
@@ -128,7 +125,6 @@ exports.delete = async (req, res) => {
 			});
 			return;
 		}
-		// TODO: validate user has access to modify this record
 		const record = await Record.findByIdAndRemove(id);
 		if (record) {
 			res.send({
@@ -149,10 +145,8 @@ exports.delete = async (req, res) => {
 
 /** Gets the summary of net worth, total assets, total liabilities. */
 exports.summary = async (req, res) => {
-	const {user_id} = req.params,
-		data = req.body;
 	const result = await Record.aggregate([
-		{$match: {}}, // TODO: filter by user that own the record, leverage an index
+		{$match: {}},
 		{$group:
 			{
 				_id: null,
@@ -185,7 +179,6 @@ exports.summary = async (req, res) => {
 			total_liability_double: {$divide: ["$total_liability", 100]}
 		}}
 	]);
-	console.debug(result);
 	const summary = result[0];
 	res.send({
 		net_worth: (summary) ? summary.net_worth_double : 0,
