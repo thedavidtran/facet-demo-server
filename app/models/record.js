@@ -10,8 +10,8 @@ module.exports = (mongoose) => {
 			enum : ["asset", "liability"],
 			required: true
 		},
-		balance: {
-			type: mongoose.Decimal128,
+		balance: { // Stored as pennies
+			type: Number,
 			default: 0
 		}
 	}, {
@@ -26,6 +26,8 @@ module.exports = (mongoose) => {
 	recordSchema.method("toJSON", function() {
 		const {__v, _id, ...object} = this.toObject();
 		object.id = _id;
+		// Convert balance from pennies to dollars
+		object.balance = object.balance / 100;
 		return object;
 	});
 

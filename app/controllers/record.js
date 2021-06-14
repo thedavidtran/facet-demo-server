@@ -14,7 +14,7 @@ exports.create = async (req, res) => {
 	const record = new Record({
 			type: draft.type,
 			name: draft.name,
-			balance: draft.balance
+			balance: Math.round(draft.balance * 100) // store as pennies
 		});
 
 	// Save Record in the database
@@ -30,8 +30,8 @@ exports.create = async (req, res) => {
 
 /** Retrieve all Records from the database. */
 exports.findAll = async (req, res) => {
-	// TODO: support pagination.
-	// TODO: sort
+	// FUTURE: support pagination.
+	// FUTURE: sort
 	const records = await Record.find({});
 	res.send(records);
 };
@@ -101,6 +101,7 @@ exports.update = async (req, res) => {
 		for (const prop in update) {
 			if (update.hasOwnProperty(prop)) record[prop] = update[prop];
 		}
+		if (update.hasOwnProperty("balance")) record.balance = record.balance * 100; // store as pennies
 		record = await record.save();
 		if (record) {
 			res.send({message: `Record id=${id} was updated successfully.`});
@@ -179,9 +180,9 @@ exports.summary = async (req, res) => {
 			net_worth: {$subtract: ["$total_asset", "$total_liability"]}
 		}},
 		{$addFields: {
-			net_worth_double: {$toDouble: "$net_worth"},
-			total_asset_double: {$toDouble: "$total_asset"},
-			total_liability_double: {$toDouble: "$total_liability"}
+			net_worth_double: {$divide: ["$net_worth", 100]},
+			total_asset_double: {$divide: ["$total_asset", 100]},
+			total_liability_double: {$divide: ["$total_liability", 100]}
 		}}
 	]);
 	console.debug(result);
