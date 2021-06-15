@@ -17,8 +17,5 @@ module.exports = (app) => {
 	// Delete a Record with id
 	router.delete("/:id", records.delete);
 
-	// Get summary of net worth, total assets, total liabilities
-	router.get("/summary/:user_id", records.summary)
-
-	app.use('/api/records', router);
+	app.use("/api/records", router);
 };
